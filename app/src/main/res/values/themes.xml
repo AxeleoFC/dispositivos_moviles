@@ -29,10 +29,9 @@
         <item name="android:backgroundTint">@color/tomato</item>
     </style>
 
-    <style name="search" parent="ButtonsGeneral">
-        <item name="android:backgroundTint">@color/font_color_dm</item>
+    <style name="search">
+        <item name="android:backgroundTint">@color/title_color_dm</item>
         <item name="android:textSize">16sp</item>
-        <item name="cornerRadius">0dp</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
