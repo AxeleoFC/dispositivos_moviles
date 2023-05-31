@@ -1,19 +1,16 @@
 package com.example.dispositivosmoviles.ui.activities
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.renderscript.ScriptGroup.Binding
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
 import com.example.dispositivosmoviles.databinding.ActivityMainBinding
-import com.google.android.material.snackbar.Snackbar
 
 //ESTA ES LA CAPA DE PRESENTACION
 class MainActivity : AppCompatActivity() {
 
     //variable que se inicializara despues
+    //Se tiene que poner el binding del activity en la que esta
     private lateinit var binding:ActivityMainBinding
 
     @SuppressLint("MissingInflatedId")
@@ -56,10 +53,17 @@ class MainActivity : AppCompatActivity() {
     //Forma binding
     private fun initClass(){
         binding.button.setOnClickListener {
-            binding.text1.text="El codigo ejecuta usando binding"
+           // binding.text1.text="El codigo ejecuta usando binding"
 
-            var f=Snackbar.make(binding.button, "Este otro mensaje usando bindig activity 1", Snackbar.LENGTH_SHORT)
-            f.show()
+            //Para mover entre acticity, this donde estoy y el otro a donde quiero ir
+            var intent= Intent(this, Activity2::class.java)
+
+            intent.putExtra("var1",binding.text1.text.toString())
+            startActivity(intent)
+
+            //Forma de usar Snackar
+//            var f=Snackbar.make(binding.button, "Este otro mensaje usando bindig activity 1", Snackbar.LENGTH_SHORT)
+//            f.show()
         }
     }
 
