@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.google.android.material.snackbar.Snackbar
 import com.example.dispositivosmoviles.databinding.ActivityMainBinding
+import com.example.dispositivosmoviles.logic.validator.LoginValidator
 
 //ESTA ES LA CAPA DE PRESENTACION
 class MainActivity : AppCompatActivity() {
@@ -16,29 +18,8 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //Binding/-funcion que ayuda a inflar "layoutInflater"
         binding=ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        //binding
-        //var button2=binding.button
-
-        //Forma por defecto para inflar
-        //setContentView(R.layout.activity_main)
-
-        /*Forma sin binding
-        /*El tipo de dato <button> se consigue por viewBindig, la misma que hace la inferencia del objetos desde el .xml*/
-        var button1=findViewById<Button>(R.id.button)
-        var txtBuscar= findViewById<TextView>(R.id.text1)
-
-        button1.text="INGRESAR"
-        button1.setOnClickListener{
-            txtBuscar.text="El evento se a ejecutado"
-            Toast.makeText(this, "Este es un ejemplo", Toast.LENGTH_SHORT).show()
-        }
-        var f=Snackbar.make(button1, "Este otro mensaje", Snackbar.LENGTH_SHORT)
-        f.show()*/
 
     }
     override fun onStart(){
@@ -52,18 +33,24 @@ class MainActivity : AppCompatActivity() {
     }
     //Forma binding
     private fun initClass(){
-        binding.button.setOnClickListener {
-           // binding.text1.text="El codigo ejecuta usando binding"
+        binding.btLogin.setOnClickListener {
 
-            //Para mover entre acticity, this donde estoy y el otro a donde quiero ir
-            var intent= Intent(this, Activity2::class.java)
+            val check=LoginValidator().checkLogin(binding.txtName.text.toString(), binding.txtPass.text.toString())
 
-            intent.putExtra("var1",binding.text1.text.toString())
-            startActivity(intent)
+            if(check){
+                var intent= Intent(this, Activity2::class.java)
+                intent.putExtra("var1"
+                    ,"")
+                startActivity(intent)
+                intent.putExtra("var2"
+                    ,2)
+                startActivity(intent)
+            }else{
+                Snackbar.make(
+                    binding.textView2,"Usuario o contraseña invalido", Snackbar.LENGTH_LONG
+                ).show()
+            }
 
-            //Forma de usar Snackar
-//            var f=Snackbar.make(binding.button, "Este otro mensaje usando bindig activity 1", Snackbar.LENGTH_SHORT)
-//            f.show()
         }
     }
 
