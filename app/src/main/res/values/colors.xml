@@ -2,8 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="red">#E52F00</color>
-    <color name="celeste">#11C2F0</color>
     <color name="aqua">#048A81</color>
     <color name="background_dm">#1c2334</color>
     <color name="font_color_dm">#DCDDDD</color>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activities.Activity2"
+    android:background="@color/tomato"
+    android:backgroundTint="@color/tomato"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/texto1"
+        style="@style/textTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="Fast and Delicious Food activity 2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.026"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/boton2"
+        style="@style/ButtonsCancel"
+        android:layout_width="93dp"
+        android:layout_height="50dp"
+
+        android:layout_marginTop="72dp"
+        android:text="Bucar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/imagen"
+        app:layout_constraintTop_toBottomOf="@+id/texto1"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/imagen"
+        android:layout_width="51dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="80dp"
+        android:background="@color/blue"
+        app:layout_constraintStart_toEndOf="@+id/texto2"
+        app:layout_constraintTop_toBottomOf="@+id/texto1"
+        app:srcCompat="@drawable/settings_24" />
+
+    <Button
+        android:id="@+id/boton1"
+        style="@style/ButtonsGeneral"
+        android:layout_width="104dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="464dp"
+        android:text="Inicio de 2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/texto1"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/texto2"
+        style="@style/search"
+        android:layout_width="213dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="80dp"
+        android:background="@color/title_color_dm"
+        android:text="Search..........................."
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/texto1" />
+
+    <TextView
+        android:id="@+id/textname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="88dp"
+        android:background="@color/black"
+        android:text="Texto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/texto2"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
