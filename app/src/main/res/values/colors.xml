@@ -2,10 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="aqua">#048A81</color>
-    <color name="background_dm">#1c2334</color>
+    <color name="low_gray">#C1C1C1</color>
+    <color name="background_dm">#1c2234</color>
     <color name="font_color_dm">#DCDDDD</color>
     <color name="title_color_dm">#fdffff</color>
     <color name="blue">#3F51B5</color>
-    <color name="tomato">#FF9800</color>
+    <color name="red">#D3266B</color>
+    <color name="background_search">#878686</color>
 </resources>
