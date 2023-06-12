@@ -30,6 +30,12 @@
             android:textColor="#1668E0"
             android:textSize="34sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="175dp"
+            android:src="@drawable/img1" />
     </androidx.cardview.widget.CardView>
 
 
