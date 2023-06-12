@@ -8,6 +8,8 @@ import com.example.dispositivosmoviles.R
 import com.example.dispositivosmoviles.databinding.ActivityMainBinding
 import com.example.dispositivosmoviles.databinding.PrincipalActivityBinding
 import com.example.dispositivosmoviles.ui.fragments.FirstFragment
+import com.example.dispositivosmoviles.ui.fragments.SecondFragment
+import com.example.dispositivosmoviles.ui.fragments.ThirdFragment
 import com.google.android.material.snackbar.Snackbar
 
 class PrincipalActivity : AppCompatActivity() {
@@ -55,19 +57,21 @@ class PrincipalActivity : AppCompatActivity() {
                 }
 
                 R.id.favoritos -> {
-                    var suma:Int = 0
-                    for(i in listOf(8,12,13)){
-                        suma +=i
-                    }
-                    Snackbar.make(binding.txtName,
-                        "La suma es ${suma}",
-                        Snackbar.LENGTH_LONG)
-                        .show()
+                    val frag = SecondFragment()
+                    val transaction = supportFragmentManager.beginTransaction()
+                    transaction.replace(binding.frmContainer.id, frag)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
+
                     true
                 }
 
                 R.id.chatgpt -> {
-                    // Respond to navigation item 2 click
+                    val frag = ThirdFragment()
+                    val transaction = supportFragmentManager.beginTransaction()
+                    transaction.replace(binding.frmContainer.id, frag)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
                     true
                 }
 
