@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="btn_height">52dp</dimen>
-    <dimen name="btn_altern_width">152dp</dimen>
-    <dimen name="margin">12dp</dimen>
-</resources>
