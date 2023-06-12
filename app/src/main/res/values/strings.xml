@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Dispositivos Moviles</string>
-    <string name="saludo">Hola Mundo</string>
+    <string name="name_banner">Bienvenidos</string>
+    <string name="menu_favoritos">Favoritos</string>
+    <string name="menu_inicio">Inicio</string>
+    <string name="menu_chatgpt">chat_gpt</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
