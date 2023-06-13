@@ -47,4 +47,9 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="botonLayer" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:iconTint">@color/white</item>
+        <item name="android:color">@color/blue</item>
+    </style>
+
 </resources>

@@ -10,6 +10,7 @@ import com.example.dispositivosmoviles.databinding.PrincipalActivityBinding
 import com.example.dispositivosmoviles.ui.fragments.FirstFragment
 import com.example.dispositivosmoviles.ui.fragments.SecondFragment
 import com.example.dispositivosmoviles.ui.fragments.ThirdFragment
+import com.example.dispositivosmoviles.ui.utilies.FragmentManager
 import com.google.android.material.snackbar.Snackbar
 
 class PrincipalActivity : AppCompatActivity() {
@@ -27,16 +28,7 @@ class PrincipalActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        //opcion 1
-//        intent.extras!!.let {
-//            var name = it.getString("var1")
-//        }
-
-        //opcion 2
         var name: String = ""
-        /*intent.extras.let {
-            name = it?.getString("var1")!!
-        }*/
         Log.d("UCE", "Hola ${name}")
         binding.txtName.text = "Bienvenido " + name.toString()
         Log.d("UCE", "Entrando a Start")
@@ -45,33 +37,26 @@ class PrincipalActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.inicio -> {
-
-                    val frag = FirstFragment() //crea una instancia del fragment que se quiere agregar
-                    val transaction = supportFragmentManager.beginTransaction()
-                    transaction.replace(binding.frmContainer.id, frag) //se coloca el id del contenedor(framelayout) y se pasa la instancia del fragment que se quiere agregar
-                    //con .add se inserta otro fragment(mas contenido encima del anterior) encima
-                    transaction.addToBackStack(null)
-                    transaction.commit() //guarda los cambios
-
+                    FragmentManager().replaceFragment(supportFragmentManager,
+                        binding.frmContainer.id,
+                        FirstFragment()
+                    )
                     true
                 }
 
                 R.id.favoritos -> {
-                    val frag = SecondFragment()
-                    val transaction = supportFragmentManager.beginTransaction()
-                    transaction.replace(binding.frmContainer.id, frag)
-                    transaction.addToBackStack(null)
-                    transaction.commit()
-
+                    FragmentManager().replaceFragment(supportFragmentManager,
+                        binding.frmContainer.id,
+                        SecondFragment()
+                    )
                     true
                 }
 
                 R.id.chatgpt -> {
-                    val frag = ThirdFragment()
-                    val transaction = supportFragmentManager.beginTransaction()
-                    transaction.replace(binding.frmContainer.id, frag)
-                    transaction.addToBackStack(null)
-                    transaction.commit()
+                    FragmentManager().replaceFragment(supportFragmentManager,
+                        binding.frmContainer.id,
+                        ThirdFragment()
+                    )
                     true
                 }
 
@@ -87,5 +72,9 @@ class PrincipalActivity : AppCompatActivity() {
             var intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 }
