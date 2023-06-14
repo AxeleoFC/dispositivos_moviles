@@ -29,7 +29,7 @@ class FirstFragment : Fragment() {
         val  list= arrayListOf<String>("A","B","c")
         val adapter=ArrayAdapter<String>(requireActivity(),R.layout.simple_spinner_layout,list)
         binding.spinner.adapter=adapter
-        binding.list.adapter=adapter
+        //binding.rvMarvelChars.adapter=adapter
     }
 
 
