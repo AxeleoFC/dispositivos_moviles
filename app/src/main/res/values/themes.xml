@@ -8,9 +8,6 @@
     </style>
 
     <style name="Theme.DispositivosMoviles" parent="Base.Theme.DispositivosMoviles">
-        <!--<item name="android:fontFamily">@font/roboto</item>-->
-        <item name="android:fontFamily">@font/roboto</item>
-        <!--<item name="android:backgroundTint">@color/background_dm</item> -->
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">14sp</item>
     </style>
