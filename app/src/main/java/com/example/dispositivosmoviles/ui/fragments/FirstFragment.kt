@@ -22,6 +22,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.example.dispositivosmoviles.logic.validator.jkanLogic.JikanAnimeLogic
 import androidx.lifecycle.lifecycleScope
+import com.example.dispositivosmoviles.logic.validator.jkanLogic.MarvleLogic
+
 class FirstFragment : Fragment() {
     private lateinit var binding: FragmentFirstBinding
 
@@ -58,7 +60,7 @@ class FirstFragment : Fragment() {
 
         lifecycleScope.launch(Dispatchers.IO){
             val rvAdapter = MarvelAdapters(
-                JikanAnimeLogic().getAllAnimes()
+                MarvleLogic().getMarvelChars("Spide",10)
             ) { sendMarvelItem(it) }
 
             withContext(Dispatchers.Main){

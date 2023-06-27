@@ -1,19 +1,20 @@
 package com.example.dispositivosmoviles.logic.validator.jkanLogic
 
 import com.example.dispositivosmoviles.data.connections.ApiConnection
-import com.example.dispositivosmoviles.data.endpints.JikanEndpoint
+import com.example.dispositivosmoviles.data.endpoints.JikanEndpoint
 import com.example.dispositivosmoviles.data.entities.marvel.MarvelChars
 
 class JikanAnimeLogic {
 
     suspend fun getAllAnimes() : List<MarvelChars>{
 
-        var call = ApiConnection.getJkanConnection()
+        var itemList= arrayListOf<MarvelChars>()
 
-        val response = call.create(JikanEndpoint::class.java).getAllAnimes()
+        var response = ApiConnection.getService(
+            ApiConnection.typeApi.Jikan,
+            JikanEndpoint::class.java).getAllAnimes()
 
-        var itemList = arrayListOf<MarvelChars>()
-        if(response.isSuccessful){
+        if(response!=null){
             response.body()!!.data.forEach{
                 val m = MarvelChars(
                     it.mal_id,
@@ -23,7 +24,6 @@ class JikanAnimeLogic {
                 )
                 itemList.add(m)
             }
-
         }
         return itemList
     }

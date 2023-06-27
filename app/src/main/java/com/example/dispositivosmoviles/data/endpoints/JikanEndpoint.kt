@@ -1,4 +1,4 @@
-package com.example.dispositivosmoviles.data.endpints
+package com.example.dispositivosmoviles.data.endpoints
 
 import com.example.dispositivosmoviles.data.entities.jkan.JikanAnimeEntity
 import retrofit2.Response
