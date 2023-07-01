@@ -11,10 +11,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 
 
-class MarvelAdapters(private val items: List<MarvelChars>, private var fnnClick:(MarvelChars)->Unit):
+class MarvelAdapters(private var fnnClick:(MarvelChars)->Unit):
     //Funcion que no devuelve nada "Unit"
     RecyclerView.Adapter<MarvelAdapters.MarvelViewHolder>() {
+    var items: List<MarvelChars> = listOf()
     class MarvelViewHolder (view: View): RecyclerView.ViewHolder(view){
+
 
         private val binding: MarvelChractersBinding=MarvelChractersBinding.bind(view)
 
@@ -44,5 +46,9 @@ class MarvelAdapters(private val items: List<MarvelChars>, private var fnnClick:
         holder.render(items[position],fnnClick)
     }
 
+    fun updateListItems(newItme: List<MarvelChars>){
+        items=items.plus(newItme)
+        notifyDataSetChanged()
+    }
 
 }

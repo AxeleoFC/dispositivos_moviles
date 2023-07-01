@@ -4,7 +4,7 @@
         <shape>
             <gradient
                 android:angle="180"
-                android:endColor="@color/blue"
+                android:endColor="@color/background_search"
                 android:type="sweep"
                 android:startColor="@color/red">
             </gradient>
