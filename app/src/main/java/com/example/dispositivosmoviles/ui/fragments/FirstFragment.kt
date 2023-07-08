@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dispositivosmoviles.R
 import com.example.dispositivosmoviles.data.entities.marvel.MarvelChars
@@ -25,6 +26,8 @@ class FirstFragment : Fragment() {
     private lateinit var binding: FragmentFirstBinding
     private lateinit var  lmanager: LinearLayoutManager
     private var rvAdapter: MarvelAdapters=MarvelAdapters{sendMarvelItem(it)}
+    private var page=1
+    private lateinit var marvelCharsItems:MutableList<MarvelChars>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -39,41 +42,51 @@ class FirstFragment : Fragment() {
 
         return binding.root
     }
-
     override fun onStart() {
         super.onStart()
-        val  list= arrayListOf<String>("A","B","c")
-        val adapter=ArrayAdapter<String>(requireActivity(),R.layout.simple_spinner_layout,list)
-        binding.spinner.adapter=adapter
-
-        chargeDataCh("Spider")
+        val names = arrayListOf<String>(
+            "Carlos", "Xavier", "Andres",
+            "Pepe", "Mariano", "Rosa"
+        )
         binding.rvSwipe.setOnRefreshListener {
-            chargeDataCh("Spider")
-            binding.rvSwipe.isRefreshing=false
+            chargeDataCh()
+            binding.rvSwipe.isRefreshing = false
         }
 
-        //Para cargar más contenido
-        binding.rvMarvelChars.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+        binding.rvMarvelChars.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val elementos =lmanager.childCount
-                val posicion=lmanager.findFirstVisibleItemPosition()
-                val tamanio=lmanager.itemCount
+                super.onScrolled(
+                    recyclerView,
+                    dx,
+                    dy
+                ) //dy es para el scroll de abajo y dx es de izquierda a derech para buscar elementos
 
-                if(dy>0){
-                    if((elementos+posicion)>=tamanio) {
-                        chargeDataCh("spider")
-                        lifecycleScope.launch((Dispatchers.IO)){
-                            val items= JikanAnimeLogic().getAllAnimes()
-                                //MarvleLogic().getMarvelChars("cap",7)
-                            withContext(Dispatchers.Main){
-                                rvAdapter.updateListItems(items)
+                if (dy > 0) {
+                    val v = lmanager.childCount  //cuantos elementos han pasado
+                    val p = lmanager.findFirstVisibleItemPosition() //posicion actual
+                    val t = lmanager.itemCount //cuantos tengo en total
+
+                    //necesitamos comprobar si el total es mayor igual que los elementos que han pasado entonces ncesitamos actualizar ya que estamos al final de la lista
+                    if ((v + p) >= t) {
+                        chargeDataCh()
+                        lifecycleScope.launch((Dispatchers.IO)) {
+                            val newItems = JikanAnimeLogic().getAllAnimes()
+                            withContext(Dispatchers.Main) {
+                                rvAdapter.updateListItems(newItems)
                             }
                         }
                     }
                 }
             }
         })
+
+        binding.buscar.addTextChangedListener { filteredText ->
+            val newItems = marvelCharsItems.filter { items ->
+                items.name.lowercase().contains(filteredText.toString().lowercase())
+            }
+            rvAdapter.replaceListItems(newItems)
+        }
+
     }
     fun sendMarvelItem(item:MarvelChars){
         val i=Intent(requireActivity(),DetailsMarvelItem::class.java)
@@ -94,20 +107,23 @@ class FirstFragment : Fragment() {
         }
     }
 
-    fun chargeDataCh(search:String){
-        lifecycleScope.launch(Dispatchers.IO){
-            rvAdapter.items = JikanAnimeLogic().getAllAnimes()
+    private fun chargeDataCh() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            marvelCharsItems = withContext(Dispatchers.IO) {
+                return@withContext (MarvleLogic().getMarvelChars(
+                    "spider",
+                    20
+                ))
+            }
 
-            withContext(Dispatchers.Main){
-                with(binding.rvMarvelChars){
+            rvAdapter.items = marvelCharsItems
 
-                    this.adapter = rvAdapter
-                    this.layoutManager = lmanager
-                }
+            binding.rvMarvelChars.apply {
+                this.adapter = rvAdapter
+                this.layoutManager = lmanager
             }
         }
     }
-
 
 
 }

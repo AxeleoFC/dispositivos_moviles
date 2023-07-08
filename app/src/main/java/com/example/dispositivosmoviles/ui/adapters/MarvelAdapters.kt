@@ -11,8 +11,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 
 
-class MarvelAdapters(private var fnnClick:(MarvelChars)->Unit):
-    //Funcion que no devuelve nada "Unit"
+class MarvelAdapters(private var fnClick:(MarvelChars)->Unit):
+
     RecyclerView.Adapter<MarvelAdapters.MarvelViewHolder>() {
     var items: List<MarvelChars> = listOf()
     class MarvelViewHolder (view: View): RecyclerView.ViewHolder(view){
@@ -43,11 +43,16 @@ class MarvelAdapters(private var fnnClick:(MarvelChars)->Unit):
     override fun getItemCount(): Int =items.size
 
     override fun onBindViewHolder(holder: MarvelViewHolder, position: Int) {
-        holder.render(items[position],fnnClick)
+        holder.render(items[position],fnClick)
     }
 
     fun updateListItems(newItme: List<MarvelChars>){
         items=items.plus(newItme)
+        notifyDataSetChanged()
+    }
+
+    fun replaceListItems(newItme: List<MarvelChars>){
+        items=newItme
         notifyDataSetChanged()
     }
 
