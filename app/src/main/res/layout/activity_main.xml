@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".ui.activities.MainActivity">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/logo_edi"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/pedOnl"
+        style="@style/pedidos"
+        android:layout_width="@dimen/tamanio"
+        android:layout_height="35dp"
+        android:layout_marginTop="216dp"
+        android:fontFamily="@font/roboto"
+        android:text="Pedidos Online"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/hola"
+        style="@style/hola"
+        android:layout_width="@dimen/tamanio"
+        android:layout_height="21dp"
+        android:layout_marginTop="8dp"
+        android:text="¡Hola! Es bueno verte nuevamente"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pedOnl" />
+
+    <TextView
+        android:id="@+id/correo"
+        style="@style/etiquetas"
+        android:layout_width="@dimen/tamanio"
+        android:layout_height="22dp"
+        android:layout_marginTop="20dp"
+        android:text="Correo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hola" />
+
+    <EditText
+        android:id="@+id/ingresoCorreo"
+        style="@style/ingresos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ems="18"
+        android:inputType="text"
+        android:hint="example@email.com"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/correo" />
+
+    <TextView
+        android:id="@+id/contrasena"
+        style="@style/etiquetas"
+        android:layout_width="@dimen/tamanio"
+        android:layout_height="22dp"
+        android:layout_marginTop="32dp"
+        android:text="Contraseña"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ingresoCorreo" />
+
+    <EditText
+        android:id="@+id/ingresoContrasena"
+        style="@style/ingresos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ems="18"
+        android:inputType="textPassword"
+        android:hint="Contraseñas"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contrasena" />
+
+    <Button
+        android:id="@+id/ingresar"
+        style="@style/boton"
+        android:layout_width="314dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/rojo"
+        android:text="Ingresar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ingresoContrasena" />
+
+    <TextView
+        android:id="@+id/conectese"
+        style="@style/hola"
+        android:layout_width="@dimen/tamanio"
+        android:layout_height="21dp"
+        android:layout_marginTop="28dp"
+        android:text="O conéctese usando las redes sociales"
+        android:textAlignment="center"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ingresar" />
+
+    <Button
+        android:id="@+id/twitter"
+        style="@style/boton"
+        android:layout_width="135dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/twitter"
+        android:text="     Twitter"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/conectese" />
+    <!--    android:drawableLeft="@drawable/twitter"-->
+
+    <Button
+        android:id="@+id/facebook"
+        style="@style/boton"
+        android:layout_width="135dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="48dp"
+        android:backgroundTint="@color/facebook"
+        android:text="    Facebook"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/twitter"
+        app:layout_constraintTop_toBottomOf="@+id/conectese" />
+
+    <TextView
+        android:id="@+id/olvido"
+        style="@style/hola"
+        android:layout_width="180dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="16dp"
+        android:text="¿Olvido su contraseña?"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.207"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/twitter" />
+
+    <TextView
+        android:id="@+id/registro"
+        style="@style/etiquetas"
+        android:layout_width="80dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="16dp"
+        android:text="Regístrese"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.854"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/facebook" />
+
+    <ImageView
+        android:id="@+id/imgOcul"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/visibility"
+        app:layout_constraintEnd_toEndOf="@+id/ingresoContrasena"
+        app:layout_constraintHorizontal_bias="0.968"
+        app:layout_constraintStart_toStartOf="@+id/ingresoContrasena"
+        app:layout_constraintTop_toTopOf="@+id/ingresoContrasena" />
+
+    <ImageView
+        android:id="@+id/imgTwit"
+        android:layout_width="29dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="@+id/twitter"
+        app:layout_constraintHorizontal_bias="0.103"
+        app:layout_constraintStart_toStartOf="@+id/twitter"
+        app:layout_constraintTop_toTopOf="@+id/twitter"
+        app:srcCompat="@drawable/twitter" />
+
+    <ImageView
+        android:id="@+id/imgFac"
+        android:layout_width="29dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="@+id/facebook"
+        app:layout_constraintHorizontal_bias="0.113"
+        app:layout_constraintStart_toStartOf="@+id/facebook"
+        app:layout_constraintTop_toTopOf="@+id/facebook"
+        app:srcCompat="@drawable/facebook" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

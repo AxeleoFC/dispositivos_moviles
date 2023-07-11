@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/buscarMenu"
+        android:icon="@drawable/baseline_search_24"
+        android:title="Buscar"
+        android:visible="true" />
+
+    <item
+        android:id="@+id/inicioMenu"
+        android:icon="@drawable/home_icon"
+        android:title="Inicio"
+        android:visible="true" />
+
+    <item
+        android:id="@+id/apis"
+        android:icon="@drawable/baseline_favorite_24"
+        android:title="Favorito"
+        android:visible="true" />
+</menu>

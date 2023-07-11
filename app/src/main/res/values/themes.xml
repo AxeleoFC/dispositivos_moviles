@@ -1,0 +1,47 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.AplicacionMovil" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.AplicacionMovil" parent="Base.Theme.AplicacionMovil" />
+
+    <style name="pedidos">
+        <item name="android:textColor">@color/gris_azulado</item>
+        <item name="android:fontFamily">@font/quicksand_bold</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+    <style name="hola">
+        <item name="android:textColor">@color/gris_claro</item>
+        <item name="android:fontFamily">@font/quicksand_bold</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="etiquetas">
+        <item name="android:textColor">@color/rojo</item>
+        <item name="android:fontFamily">@font/quicksand_medium</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ingresos">
+        <item name="android:textColor">@color/gris_azulado</item>
+        <item name="android:fontFamily">@font/quicksand_bold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="boton" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/asap_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="cornerRadius">10dp</item>
+    </style>
+
+    <style name="activeIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/facebook</item>
+    </style>
+    <style name="botonLayer" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:iconTint">@color/white</item>
+        <item name="android:color">@color/blue</item>
+    </style>
+</resources>
