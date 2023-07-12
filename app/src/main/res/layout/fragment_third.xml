@@ -4,20 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/frameLayoutF3"
-    android:background="#455287"
     tools:context=".ui.fragments.ThirdFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_margin="35dp"
-        app:cardCornerRadius="45dp"
         app:cardBackgroundColor="@color/red"
+        app:cardCornerRadius="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.033">
 
         <TextView
             android:id="@+id/texstoFT1"

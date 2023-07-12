@@ -3,20 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/inicio"
-        android:icon="@drawable/home_48px"
-        android:title="@string/menu_inicio"
+        android:id="@+id/buscarMenu"
+        android:icon="@drawable/baseline_search_24"
+        android:title="Buscar"
         android:visible="true" />
 
     <item
-        android:id="@+id/favoritos"
-        android:icon="@drawable/favorite_48px"
-        android:title="@string/menu_favoritos"
+        android:id="@+id/inicioMenu"
+        android:icon="@drawable/home_icon"
+        android:title="Inicio"
         android:visible="true" />
 
     <item
-        android:id="@+id/chatgpt"
-        android:icon="@drawable/chatgpt_48px"
-        android:title="@string/menu_chatgpt"
+        android:id="@+id/apis"
+        android:icon="@drawable/baseline_favorite_24"
+        android:title="Favorito"
         android:visible="true" />
 </menu>
