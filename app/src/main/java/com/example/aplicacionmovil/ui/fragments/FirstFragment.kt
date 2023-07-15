@@ -2,11 +2,13 @@ package com.example.aplicacionmovil.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +17,8 @@ import com.example.aplicacionmovil.R
 import com.example.aplicacionmovil.databinding.FragmentFirstBinding
 import com.example.aplicacionmovil.logic.marvelLogic.MarvelLogicDB
 import com.example.aplicacionmovil.ui.activities.DetailsMarvelItem
+import com.example.aplicacionmovil.ui.activities.dataStore
+import com.example.aplicacionmovil.ui.data.UserDataStore
 import com.example.aplicacionmovil.ui.utilities.Metodos
 import com.flores.aplicacionmoviles.logic.data.MarvelChars
 import com.flores.aplicacionmoviles.logic.jikanLogic.JikanAnimeLogic
@@ -22,6 +26,9 @@ import com.flores.aplicacionmoviles.logic.marvelLogic.MarvelCharactersLogic
 import com.flores.aplicacionmoviles.ui.adapters.MarvelAdapter
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -57,6 +64,15 @@ class FirstFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
+        lifecycleScope.launch(Dispatchers.Main){
+            getDataStore().collect{user->
+                Log.d("UCE",user.name)
+                binding.textoFS1.text=user.email
+                Log.d("UCE",user.email)
+                Log.d("UCE",user.session)
+            }
+        }
 
         chargeDataRVInit(offset,limit)
         binding.rvSwipe2.setOnRefreshListener {
@@ -189,6 +205,12 @@ class FirstFragment : Fragment() {
         }
     }
 
+    private fun getDataStore()=requireActivity().dataStore.data.map {prefs->
+            UserDataStore(
+            name = prefs[stringPreferencesKey("usuario")].orEmpty(),
+            email = prefs[stringPreferencesKey("email")].orEmpty(),
+            session = prefs[stringPreferencesKey("session")].orEmpty())
+    }
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch(Dispatchers.Main){

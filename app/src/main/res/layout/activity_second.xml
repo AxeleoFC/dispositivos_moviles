@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@drawable/delta"
     tools:context=".ui.activities.SecondActivity">
 
 
     <TextView
-        android:id="@+id/txtName"
-        android:layout_width="254dp"
-        android:layout_height="44dp"
+        android:id="@+id/txtWelcome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/quicksand_bold"
         android:gravity="center|center_vertical"
@@ -24,13 +25,14 @@
 
     <FrameLayout
         android:id="@+id/frm_container"
-        android:layout_width="411dp"
-        android:layout_height="691dp"
+        android:layout_width="match_parent"
+        android:layout_height="581dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtName" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -43,4 +45,4 @@
         app:menu="@menu/bottom_navigation_menu" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
