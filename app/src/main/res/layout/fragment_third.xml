@@ -22,18 +22,18 @@
             android:id="@+id/texstoFT1"
 
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/satisfy"
+            android:layout_height="234dp"
+            android:fontFamily="@font/asap_bold"
             android:gravity="center_horizontal|bottom"
-            android:text="Tercer fragment"
+            android:text="Favoritos"
             android:textColor="@color/black"
             android:textSize="34sp"
             android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="175dp"
+            android:layout_width="match_parent"
+            android:layout_height="174dp"
             android:src="@drawable/img2" />
     </androidx.cardview.widget.CardView>
 

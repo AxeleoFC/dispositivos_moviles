@@ -53,9 +53,10 @@
 
         <EditText
             android:id="@+id/txtFilter2"
-            android:layout_width="398dp"
-            android:layout_height="55dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:imeOptions="actionDone"
+            android:text=""
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="@color/white"

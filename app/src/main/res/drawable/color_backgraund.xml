@@ -4,9 +4,9 @@
         <shape>
             <gradient
                 android:angle="180"
-                android:endColor="@color/rojo"
+                android:endColor="@color/white"
                 android:type="sweep"
-                android:startColor="@color/black">
+                android:startColor="@color/blue">
             </gradient>
         </shape>
     </item>

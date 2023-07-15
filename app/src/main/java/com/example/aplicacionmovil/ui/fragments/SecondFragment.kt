@@ -87,13 +87,6 @@ class SecondFragment : Fragment() {
             }
         })
 
-        binding.txtFilter.addTextChangedListener { filteredText ->
-            val newItems = marvelCharsItems.filter { items ->
-                items.name.lowercase().contains(filteredText.toString().lowercase())
-            }
-            rvAdapter.replaceListItems(newItems)
-        }
-
     }
 
     private fun sendMarvelItem(item: MarvelChars) {

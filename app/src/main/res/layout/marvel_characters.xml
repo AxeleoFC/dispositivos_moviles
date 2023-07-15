@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="180dp"
+    android:layout_height="220dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="190dp"
-        android:layout_margin="30dp"
-        app:elevation="10dp"
+        android:layout_width="168dp"
+        android:layout_height="207dp"
+        android:layout_margin="25dp"
+        android:padding="5dp"
         app:cardCornerRadius="12dp"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,43 +24,50 @@
 
             <ImageView
                 android:id="@+id/imgChar"
-                android:layout_width="112dp"
-                android:layout_height="165dp"
-                android:layout_margin="10dp"
+                android:layout_width="87dp"
+                android:layout_height="70dp"
+                android:layout_margin="14dp"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.506"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.03"></ImageView>
+                app:layout_constraintVertical_bias="0.051" />
 
             <TextView
                 android:id="@+id/textoName"
-                android:layout_width="186dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="16dp"
-                android:textAlignment="center"
-                android:textSize="16sp"
+                android:layout_width="148dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="8dp"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.836"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            </TextView>
+                app:layout_constraintTop_toBottomOf="@+id/imgChar"
+                tools:text="Marvel" />
 
             <TextView
                 android:id="@+id/textoComic"
-                android:layout_width="188dp"
-                android:layout_height="113dp"
-                android:layout_marginTop="8dp"
-                android:text="Marvel"
+                android:layout_width="148dp"
+                android:layout_height="42dp"
+                android:layout_marginTop="4dp"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.433"
-                app:layout_constraintStart_toEndOf="@+id/imgChar"
-                app:layout_constraintTop_toBottomOf="@+id/textoName">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textoName"
+                tools:text="Marvel" />
 
-            </TextView>
+            <Button
+                android:id="@+id/btn_favorito"
+                android:layout_width="52dp"
+                android:layout_height="29dp"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/white"
+                android:drawableTop="@drawable/baseline_favorite_12"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textoComic" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
