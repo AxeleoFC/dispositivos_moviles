@@ -100,16 +100,16 @@ class MainActivity : AppCompatActivity() {
                 RESULT_OK->{
                     Snackbar.make(
                         binding.pedOnl, "Resultado exitoso",Snackbar.LENGTH_LONG
-                    )
+                    ).show()
                 }
                 RESULT_CANCELED->{
                     Snackbar.make(
                         binding.pedOnl, "Resultado fallido",Snackbar.LENGTH_LONG
-                    )
+                    ).show()
                 }else->{
                 Snackbar.make(
                     binding.pedOnl, "Resultado dudoso",Snackbar.LENGTH_LONG
-                )
+                ).show()
                 }
             }
         }
