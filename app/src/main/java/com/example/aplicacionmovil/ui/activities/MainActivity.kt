@@ -1,10 +1,14 @@
 package com.example.aplicacionmovil.ui.activities
 
 import android.annotation.SuppressLint
+import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -74,6 +78,45 @@ class MainActivity : AppCompatActivity() {
                     Snackbar.LENGTH_LONG
                 ).show()
             }
+        }
+        binding.twitter.setOnClickListener {
+            /*Forma de mandar a otra direccion o aplicacion
+            val intent=Intent(Intent.ACTION_VIEW,
+                //Uri.parse("geo: -0.2324234,-23.423423490")
+                        Uri.parse("tel:0123456789")
+                //Uri.parse("http://google.com.ec")
+
+            )*/
+            val intent=Intent(Intent.ACTION_WEB_SEARCH)
+            intent.setClassName("com.google.android.googlequicksearchbox",
+                "com.google.android.googlequicksearchbox.SearchActivity")
+            //poner lo que se quiere buscar
+            intent.putExtra(SearchManager.QUERY,"Elden Ring")
+            startActivity(intent)
+        }
+
+        val appResultLocal = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ resultActivity->
+            when(resultActivity.resultCode){
+                RESULT_OK->{
+                    Snackbar.make(
+                        binding.pedOnl, "Resultado exitoso",Snackbar.LENGTH_LONG
+                    )
+                }
+                RESULT_CANCELED->{
+                    Snackbar.make(
+                        binding.pedOnl, "Resultado fallido",Snackbar.LENGTH_LONG
+                    )
+                }else->{
+                Snackbar.make(
+                    binding.pedOnl, "Resultado dudoso",Snackbar.LENGTH_LONG
+                )
+                }
+            }
+        }
+
+        binding.facebook.setOnClickListener {
+            val resIntent=Intent(this, ResultActivity::class.java)
+            appResultLocal.launch(resIntent)
         }
     }
     private suspend fun saveDataStore(stringData: String){
