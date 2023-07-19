@@ -1,5 +1,6 @@
 package com.example.aplicacionmovil.ui.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.aplicacionmovil.R
@@ -17,12 +18,15 @@ class ResultActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        val i= Intent()
         binding.ok.setOnClickListener {
-            setResult(RESULT_OK)
+            i.putExtra("result", "Resultdao exitoso")
+            setResult(RESULT_OK, i)
             finish()
         }
         binding.btfalso.setOnClickListener {
-            setResult(RESULT_CANCELED)
+            i.putExtra("result", "Resultdao fallido")
+            setResult(RESULT_CANCELED, i)
             finish()
         }
 
