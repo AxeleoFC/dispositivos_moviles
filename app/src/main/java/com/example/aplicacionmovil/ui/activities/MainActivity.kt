@@ -1,15 +1,18 @@
 package com.example.aplicacionmovil.ui.activities
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
+import android.location.Geocoder
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.PermissionChecker.PermissionResult
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -19,6 +22,8 @@ import androidx.lifecycle.lifecycleScope
 import com.example.aplicacionmovil.R
 import com.example.aplicacionmovil.databinding.ActivityMainBinding
 import com.flores.aplicacionmoviles.logic.validator.LoginValidator
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,11 +36,13 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     @SuppressLint("WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        fusedLocationProviderClient=LocationServices.getFusedLocationProviderClient(this)
     }
 
     override fun onStart() {
@@ -49,6 +56,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    @SuppressLint("MissingPermission")
     private fun initClass() {
         binding.ingresar.setOnClickListener {
 
@@ -81,6 +89,37 @@ class MainActivity : AppCompatActivity() {
                 ).show()
             }
         }
+        val locationContract =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()){ isGrant->
+            when(isGrant){
+                true->{
+                    fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+                        if(fusedLocationProviderClient.lastLocation.result != null){
+                            Snackbar.make(binding.correo,
+                                "${it.latitude},${it.longitude}",
+                                Snackbar.LENGTH_LONG).show()
+                            val a=Geocoder(this)
+                            a.getFromLocation(it.latitude,it.latitude,1)
+                        }else{
+                            Snackbar.make(binding.correo,
+                                "El GPS no esta ensendido, encienda el GPS",
+                                Snackbar.LENGTH_LONG).show()
+                        }
+                    }
+                }
+                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)
+                ->{
+                Snackbar.make(binding.correo,"Se denego el permiso",Snackbar.LENGTH_LONG).show()
+                }
+                false->{
+                    Snackbar.make(binding.correo,"Acceso denegado",Snackbar.LENGTH_LONG).show()
+                }
+                else->{
+                    Snackbar.make(binding.correo,"Se dio un error",Snackbar.LENGTH_LONG).show()
+                }
+            }
+
+        }
         binding.twitter.setOnClickListener {
             /*Forma de mandar a otra direccion o aplicacion
             val intent=Intent(Intent.ACTION_VIEW,
@@ -88,13 +127,17 @@ class MainActivity : AppCompatActivity() {
                         Uri.parse("tel:0123456789")
                 //Uri.parse("http://google.com.ec")
 
-            )*/
+            )
             val intent=Intent(Intent.ACTION_WEB_SEARCH)
             intent.setClassName("com.google.android.googlequicksearchbox",
                 "com.google.android.googlequicksearchbox.SearchActivity")
             //poner lo que se quiere buscar
             intent.putExtra(SearchManager.QUERY,"Elden Ring")
-            startActivity(intent)
+            startActivity(intent)*/
+            //---------------------------------------------------------------------------
+            locationContract.launch(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+            //locationContract.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+
         }
 
         val appResultLocal = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ resultActivity->
