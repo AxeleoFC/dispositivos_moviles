@@ -21,13 +21,18 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
 import com.example.aplicacionmovil.R
 import com.example.aplicacionmovil.databinding.ActivityMainBinding
+import com.example.aplicacionmovil.ui.utilities.MyContextManager
 import com.flores.aplicacionmoviles.logic.validator.LoginValidator
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsStatusCodes
 import com.google.android.gms.location.Priority
+import com.google.android.gms.location.SettingsClient
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,83 +50,103 @@ class MainActivity : AppCompatActivity() {
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
 
-    private var currentLocation:Location?=null
+    private lateinit var client: SettingsClient
+    private lateinit var locationSettingsRequest: LocationSettingsRequest
 
-    private val speechToText=registerForActivityResult(ActivityResultContracts.StartActivityForResult()){resultActivity->
-        var rColor=R.color.black
-        var mensaje= ""
-        when(resultActivity.resultCode){
-            RESULT_OK->{
-                rColor=R.color.blue
-                val msg=resultActivity.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.get(0)
-                    .toString()
-                mensaje=msg
-                if(msg.isNotEmpty()){
-                    val intent=Intent(Intent.ACTION_WEB_SEARCH)
-                    intent.setClassName("com.google.android.googlequicksearchbox",
-                        "com.google.android.googlequicksearchbox.SearchActivity")
-                    //poner lo que se quiere buscar
-                    intent.putExtra(SearchManager.QUERY,msg)
-                    startActivity(intent)
+    private var currentLocation: Location? = null
+
+    private val speechToText =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+            val sn = Snackbar.make(binding.correo, "", Snackbar.LENGTH_LONG)
+            var message = ""
+            when (activityResult.resultCode) {
+                RESULT_OK -> {
+                    //Devuelve el texto de voz
+                    val msg = activityResult
+                        .data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.get(0)
+                        .toString()
+                    //Para hacer una consulta con la voz
+                    if (msg.isNotEmpty()) {
+                        val intent = Intent(
+                            Intent.ACTION_WEB_SEARCH
+                        )
+                        intent.setClassName(
+                            "com.google.android.googlequicksearchbox",
+                            "com.google.android.googlequicksearchbox.SearchActivity"
+                        )
+                        intent.putExtra(SearchManager.QUERY, msg)
+                        startActivity(intent)
+                    }
+                    sn.setBackgroundTint(resources.getColor(R.color.blue))
+                }
+                RESULT_CANCELED -> {
+                    message = "Proceso cancelado"
+                    sn.setBackgroundTint(resources.getColor(R.color.red))
+                }
+                else -> {
+                    message = "Ocurrio un error"
+                    sn.setBackgroundTint(resources.getColor(R.color.red))
                 }
             }
-            RESULT_CANCELED->{
-                rColor=R.color.rojo
-                mensaje="Proceso cancelado"
-            }else->{
-            mensaje="Ocurrio un error"
+            sn.setText(message)
+            sn.show()
         }
-        }
-        val sn=Snackbar.make(
-            binding.pedOnl, mensaje,Snackbar.LENGTH_LONG
-        )
-        val color=resources.getColor(rColor)
-        sn.setBackgroundTint(color)
-        sn.show()
-    }
 
     @SuppressLint("MissingPermission")
     private val locationContract =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()){ isGrant->
-            when(isGrant){
-                true->{
-                    val task=fusedLocationProviderClient.lastLocation
-                    task.addOnSuccessListener {location->
-                        val alert=AlertDialog.Builder(this)
-                        alert.apply {
-                            setTitle("Alerta")
-                            setMessage("Existe un problema con el sistema o el funcionamineto")
-                            setPositiveButton("OK"){dialog, id->
-                                dialog.dismiss()
-                            }
-                            setNegativeButton("Cancelar"){dialog, id->
-                                dialog.dismiss()
-                            }
-                            setCancelable(false)
-                        }.create()
-                        alert.show()
-                        currentLocation=location
-                        fusedLocationProviderClient.requestLocationUpdates(
-                            locationRequest,
-                            locationCallback,
-                            Looper.getMainLooper())
-                    }
-                    task.addOnFailureListener{
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
 
+            when (isGranted) {
+                true -> {
+
+                    /*val alert = AlertDialog.Builder(this).apply {
+                        setTitle("Notificacion")
+                        setMessage("por favor verifique si el GPS esta encendido.")
+                        setPositiveButton("Verificar"){dialog, id->
+                            val i= Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                            startActivity(i)
+                            dialog.dismiss()
+                        }
+                        setCancelable(false)
+                    }.show()*/
+                    client.checkLocationSettings(locationSettingsRequest).apply{
+                        addOnSuccessListener {
+                            val task = fusedLocationProviderClient.lastLocation
+                            task.addOnSuccessListener { location ->
+                                fusedLocationProviderClient.requestLocationUpdates(
+                                    locationRequest,
+                                    locationCallback,
+                                    Looper.getMainLooper()
+                                )
+                            }
+                        }
+                        addOnFailureListener {ex->
+                            if(ex is ResolvableApiException){
+                                ex.startResolutionForResult(this@MainActivity
+                                    , LocationSettingsStatusCodes.RESOLUTION_REQUIRED)
+                            }
+
+                        }
                     }
                 }
-                shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)
-                ->{
-                    Snackbar.make(binding.correo,"Se denego el permiso",Snackbar.LENGTH_LONG).show()
+
+                shouldShowRequestPermissionRationale(
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) -> {
+                    Snackbar.make(
+                        binding.correo,
+                        "Ayude con el permiso no sea mlaito",
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
-                false->{
-                    Snackbar.make(binding.correo,"Acceso denegado",Snackbar.LENGTH_LONG).show()
-                }
-                else->{
-                    Snackbar.make(binding.correo,"Se dio un error",Snackbar.LENGTH_LONG).show()
+                false -> {
+                    Snackbar.make(
+                        binding.correo,
+                        "DENEGADO",
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
             }
-
         }
 
     @SuppressLint("WrongViewCast")
@@ -129,24 +154,32 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        fusedLocationProviderClient=LocationServices.getFusedLocationProviderClient(this)
 
-        locationRequest=LocationRequest.Builder(
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
+        locationRequest = LocationRequest.Builder(
             Priority.PRIORITY_HIGH_ACCURACY,
-            2000,
-        ).setMaxUpdates(3)
-            .build()
-        locationCallback = object :LocationCallback(){
+            1000,
+        ).build()
+
+        locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
-                if(locationResult!=null){
-                    locationResult.locations.forEach{location->
-                        currentLocation=location
-                        Log.d("UCE","Ubicacion: ${location.latitude}, ${location.longitude}")
+
+                if (locationResult != null){
+                    locationResult.locations.forEach{
+                        currentLocation = it
+                        Log.d("UCE",
+                            "Ubicaión: ${it.latitude}, "+ "${it.longitude}")
                     }
                 }
             }
         }
+
+        client = LocationServices.getSettingsClient(this)
+        locationSettingsRequest=LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest).build()
+
     }
 
     override fun onStart() {
@@ -157,13 +190,14 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("ResourceAsColor", "MissingPermission")
     private fun initClass() {
         binding.ingresar.setOnClickListener {
 
@@ -198,23 +232,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.twitter.setOnClickListener {
-            /*Forma de mandar a otra direccion o aplicacion
-            val intent=Intent(Intent.ACTION_VIEW,
-                //Uri.parse("geo: -0.2324234,-23.423423490")
-                        Uri.parse("tel:0123456789")
-                //Uri.parse("http://google.com.ec")
-
-            )
-            val intent=Intent(Intent.ACTION_WEB_SEARCH)
-            intent.setClassName("com.google.android.googlequicksearchbox",
-                "com.google.android.googlequicksearchbox.SearchActivity")
-            //poner lo que se quiere buscar
-            intent.putExtra(SearchManager.QUERY,"Elden Ring")
-            startActivity(intent)*/
-            //---------------------------------------------------------------------------
-            locationContract.launch(android.Manifest.permission.ACCESS_COARSE_LOCATION)
-            //locationContract.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
-
+            locationContract.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
         }
 
         val appResultLocal = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ resultActivity->
@@ -242,22 +260,17 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.facebook.setOnClickListener {
-            val intenSpeech=Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-            intenSpeech.putExtra(
+            val intentSpeech=Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            intentSpeech.putExtra(
                 RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
             )
-            intenSpeech.putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+            intentSpeech.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE,
                 Locale.getDefault()
             )
-            intenSpeech.putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                "Di algo"
-            )
-            speechToText.launch(intenSpeech)
-        /*val resIntent=Intent(this, ResultActivity::class.java)
-            appResultLocal.launch(resIntent)*/
+            intentSpeech.putExtra(RecognizerIntent.EXTRA_PROMPT, "DI ALGO...")
+            speechToText.launch(intentSpeech)
         }
     }
     private suspend fun saveDataStore(stringData: String){
@@ -266,6 +279,11 @@ class MainActivity : AppCompatActivity() {
             prefs[stringPreferencesKey("session")] = UUID.randomUUID().toString()
             prefs[stringPreferencesKey("email")] = UUID.randomUUID().toString()
         }
+    }
+
+    private fun test(){
+        var location=MyContextManager(this)
+        location.getClientLocation()
     }
 
 }
