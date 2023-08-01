@@ -1,6 +1,7 @@
 package com.example.aplicacionmovil.ui.activities
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,10 +10,13 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.aplicacionmovil.R
 import com.example.aplicacionmovil.databinding.ActivityNotificationBinding
+import com.example.aplicacionmovil.ui.utilities.BrotcasterNotification
+import java.util.Calendar
 
 class NotificationActivity : AppCompatActivity() {
 
@@ -25,6 +29,16 @@ class NotificationActivity : AppCompatActivity() {
         binding.btnNotificacion.setOnClickListener {
             createNotification()
             sendNotificaction()
+        }
+        binding.btnHora.setOnClickListener {
+            val calendar= Calendar.getInstance()
+            val hora=binding.reloj.hour
+            val minuto=binding.reloj.minute
+            Toast.makeText(this,"La hora del recordatorio sera a las $hora con $minuto", Toast.LENGTH_SHORT).show()
+            calendar.set(Calendar.HOUR, hora)
+            calendar.set(Calendar.MINUTE, minuto)
+            calendar.set(Calendar.SECOND, 0)
+            sendNotificactionTimePicker(calendar.timeInMillis)
         }
 
     }
@@ -58,7 +72,7 @@ class NotificationActivity : AppCompatActivity() {
         noti.setContentTitle("Primera notificacion")
         noti.setContentText("MI primera notificaciones en android")
         noti.setSmallIcon(R.drawable.img1)
-        noti.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        noti.setPriority(NotificationCompat.PRIORITY_HIGH)
         noti.setStyle(
             NotificationCompat
                 .BigTextStyle()
@@ -69,5 +83,18 @@ class NotificationActivity : AppCompatActivity() {
         with(NotificationManagerCompat.from(this)){
             notify(1,noti.build())
         }
+    }
+
+    @SuppressLint("ServiceCast")
+    fun sendNotificactionTimePicker(time:Long){
+        val miIntent=Intent(applicationContext, BrotcasterNotification::class.java)
+        val myPendingIntent= PendingIntent.getBroadcast(
+            applicationContext,
+            0,
+            miIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val alarmManager=getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, myPendingIntent)
     }
 }
