@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                 ) -> {
                     Snackbar.make(
                         binding.correo,
-                        "Ayude con el permiso no sea mlaito",
+                        "Ayude con el permiso no sea malito",
                         Snackbar.LENGTH_LONG
                     ).show()
                 }
