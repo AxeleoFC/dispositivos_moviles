@@ -80,4 +80,5 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
 
     implementation("androidx.biometric:biometric:1.2.0-alpha05")
+    implementation("com.facebook.shimmer:shimmer:0.1.0@aar")
 }

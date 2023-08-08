@@ -4,18 +4,24 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
+import androidx.activity.viewModels
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.aplicacionmovil.R
 import com.example.aplicacionmovil.databinding.ActivityBiometricBinding
+import com.example.aplicacionmovil.ui.viewmodesl.BiometricViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class BiometricActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBiometricBinding
+    private val biometrivModel by viewModels<BiometricViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +31,19 @@ class BiometricActivity : AppCompatActivity() {
         binding.btnAutenticacion.setOnClickListener {
             autenticacionBiometrica()
         }
+        biometrivModel.isLoading.observe(this){isLoading->
+            if(isLoading){
+                binding.layaut.visibility=View.GONE
+                binding.layaut1.visibility=View.VISIBLE
+            }else{
+                binding.layaut.visibility=View.VISIBLE
+                binding.layaut1.visibility=View.GONE
+            }
+
+        }
+        lifecycleScope.launch {
+            biometrivModel.chargingData()
+        }
     }
 
     private fun autenticacionBiometrica(){
@@ -33,6 +52,7 @@ class BiometricActivity : AppCompatActivity() {
             val biometricPrompt = BiometricPrompt.PromptInfo.Builder()
                 .setTitle("Autenticacion requerida")
                 .setSubtitle("Ingrese su huella digital")
+                .setNegativeButtonText("Cancelar papu")
                 .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
                 .build()
             val biometricManager = BiometricPrompt(this
@@ -41,13 +61,11 @@ class BiometricActivity : AppCompatActivity() {
                     override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                         super.onAuthenticationError(errorCode, errString)
                     }
-
                     override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                         super.onAuthenticationSucceeded(result)
                         val miIntent = Intent(this@BiometricActivity, SecondActivity::class.java)
                         startActivity(miIntent)
                     }
-
                     override fun onAuthenticationFailed() {
                         super.onAuthenticationFailed()
                     }
@@ -62,7 +80,7 @@ class BiometricActivity : AppCompatActivity() {
     private fun checkBiometric():Boolean{
         var comprobar: Boolean=false
         val biometricManager=BiometricManager.from(this)
-        when(biometricManager.canAuthenticate(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)){
+        when(biometricManager.canAuthenticate(BIOMETRIC_STRONG)){
             BiometricManager.BIOMETRIC_SUCCESS->{
                 comprobar = true
             }
@@ -73,13 +91,11 @@ class BiometricActivity : AppCompatActivity() {
                 comprobar= false
             }
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED->{
-                /*val intent=Intent(Settings.ACTION_BIOMETRIC_ENROLL)
+                val intent=Intent(Settings.ACTION_BIOMETRIC_ENROLL)
                 intent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED
-                    , BIOMETRIC_STRONG or DEVICE_CREDENTIAL)*/
+                    , BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
 
-                startActivity(Intent(Settings.ACTION_BIOMETRIC_ENROLL)
-                    .putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED
-                        , BIOMETRIC_STRONG or DEVICE_CREDENTIAL))
+                startActivity(intent)
                 comprobar= true
             }
         }
