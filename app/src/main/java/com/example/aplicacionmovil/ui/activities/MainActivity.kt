@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.speech.RecognizerIntent
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.datastore.core.DataStore
@@ -34,6 +35,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes
 import com.google.android.gms.location.Priority
 import com.google.android.gms.location.SettingsClient
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -54,6 +56,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var locationSettingsRequest: LocationSettingsRequest
 
     private var currentLocation: Location? = null
+
+    //--------------------------------------------------------
+    private lateinit var auth: FirebaseAuth
+
+    private  val TAG = "UCE"
 
     private val speechToText =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
@@ -99,16 +106,6 @@ class MainActivity : AppCompatActivity() {
             when (isGranted) {
                 true -> {
 
-                    /*val alert = AlertDialog.Builder(this).apply {
-                        setTitle("Notificacion")
-                        setMessage("por favor verifique si el GPS esta encendido.")
-                        setPositiveButton("Verificar"){dialog, id->
-                            val i= Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                            startActivity(i)
-                            dialog.dismiss()
-                        }
-                        setCancelable(false)
-                    }.show()*/
                     client.checkLocationSettings(locationSettingsRequest).apply{
                         addOnSuccessListener {
                             val task = fusedLocationProviderClient.lastLocation
@@ -180,11 +177,20 @@ class MainActivity : AppCompatActivity() {
         locationSettingsRequest=LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest).build()
 
+        binding.ingresar.setOnClickListener{
+
+            authWithFirebaseEmail(
+                binding.ingresoCorreo.text.toString(),
+                binding.ingresoContrasena.text.toString()
+            )
+
+        }
+
     }
 
     override fun onStart() {
         super.onStart()
-        initClass()
+        //initClass()
     }
 
     override fun onPause() {
@@ -200,6 +206,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("ResourceAsColor", "MissingPermission")
     private fun initClass() {
         binding.ingresar.setOnClickListener {
+
 
             val check = LoginValidator().checkLogin(
                 binding.ingresoCorreo.text.toString(),
@@ -285,5 +292,31 @@ class MainActivity : AppCompatActivity() {
         var location=MyContextManager(this)
         location.getClientLocation()
     }
+
+    private fun authWithFirebaseEmail(email: String, password: String){
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "createUserWithEmail:success")
+                    val user = auth.currentUser
+
+                    Toast.makeText(baseContext,
+                        "Authentication Success.",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                    Toast.makeText(
+                        baseContext,
+                        "Authentication failed.",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+            }
+    }
+
+
 
 }

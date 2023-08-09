@@ -53,7 +53,7 @@ class BiometricActivity : AppCompatActivity() {
                 .setTitle("Autenticacion requerida")
                 .setSubtitle("Ingrese su huella digital")
                 .setNegativeButtonText("Cancelar papu")
-                .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
+                .setAllowedAuthenticators(BIOMETRIC_STRONG)
                 .build()
             val biometricManager = BiometricPrompt(this
                 , executor
