@@ -7,12 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.aplicacionmovil.R
 import com.example.aplicacionmovil.databinding.MarvelCharactersBinding
 import com.flores.aplicacionmoviles.logic.data.MarvelChars
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 
-class MarvelAdapter (
-    private var fnClick: (MarvelChars) -> Unit
-) :
-    RecyclerView.Adapter<MarvelAdapter.MarvelViewHolder>() {
+class MarvelAdapter (private var fnClick: (MarvelChars) -> Unit) : RecyclerView.Adapter<MarvelAdapter.MarvelViewHolder>() {
 
     var items: List<MarvelChars> = listOf()
     class MarvelViewHolder(view: View) : RecyclerView.ViewHolder(view) {

@@ -7,6 +7,7 @@
     tools:context=".ui.fragments.ThirdFragment">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_margin="35dp"
@@ -36,5 +37,49 @@
             android:layout_height="174dp"
             android:src="@drawable/img2" />
     </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/layaoutPrincipal"
+        android:layout_width="match_parent"
+        android:layout_height="374dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintVertical_bias="1.0">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/rvSwipe"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvMarvelChars"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layaoutSimmer"
+        android:layout_width="413dp"
+        android:layout_height="366dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintVertical_bias="1.0">
+
+        <include layout="@layout/fragment_shimmer" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

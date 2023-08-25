@@ -9,7 +9,7 @@ data class MarvelChars(val id:Int,
                        val name:String,
                        val comic:String,
                        val image:String,
-                       val synapsi:String
+                       val synapsi:String,
 ) : Parcelable
 fun MarvelChars.getMarvelsCharacters():MarvelCharsDB{
     return MarvelCharsDB(

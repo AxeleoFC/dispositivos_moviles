@@ -11,8 +11,7 @@ import com.example.aplicacionmovil.ui.activities.SecondActivity
 
 class BrotcasterNotification: BroadcastReceiver() {
 
-    val CHANNEL: String ="Cotificacion"
-
+    val CHANNEL: String ="Notificacion"
 
     override fun onReceive(context: Context, intent: Intent) {
 

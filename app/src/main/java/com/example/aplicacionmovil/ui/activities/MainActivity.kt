@@ -1,6 +1,5 @@
 package com.example.aplicacionmovil.ui.activities
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
@@ -11,8 +10,9 @@ import android.os.Bundle
 import android.os.Looper
 import android.speech.RecognizerIntent
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -22,7 +22,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.aplicacionmovil.R
 import com.example.aplicacionmovil.databinding.ActivityMainBinding
 import com.example.aplicacionmovil.ui.utilities.MyContextManager
-import com.flores.aplicacionmoviles.logic.validator.LoginValidator
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -34,7 +33,11 @@ import com.google.android.gms.location.LocationSettingsStatusCodes
 import com.google.android.gms.location.Priority
 import com.google.android.gms.location.SettingsClient
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.Locale
 import java.util.UUID
@@ -54,6 +57,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var locationSettingsRequest: LocationSettingsRequest
 
     private var currentLocation: Location? = null
+    private lateinit var auth: FirebaseAuth
+    private  val TAG = "UCE"
 
     private val speechToText =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
@@ -98,17 +103,6 @@ class MainActivity : AppCompatActivity() {
 
             when (isGranted) {
                 true -> {
-
-                    /*val alert = AlertDialog.Builder(this).apply {
-                        setTitle("Notificacion")
-                        setMessage("por favor verifique si el GPS esta encendido.")
-                        setPositiveButton("Verificar"){dialog, id->
-                            val i= Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                            startActivity(i)
-                            dialog.dismiss()
-                        }
-                        setCancelable(false)
-                    }.show()*/
                     client.checkLocationSettings(locationSettingsRequest).apply{
                         addOnSuccessListener {
                             val task = fusedLocationProviderClient.lastLocation
@@ -153,6 +147,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        auth = Firebase.auth
         setContentView(binding.root)
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -200,36 +195,12 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("ResourceAsColor", "MissingPermission")
     private fun initClass() {
         binding.ingresar.setOnClickListener {
-
-            val check = LoginValidator().checkLogin(
-                binding.ingresoCorreo.text.toString(),
-                binding.ingresoContrasena.text.toString()
-            )
-
-            if (check) {
-                lifecycleScope.launch(Dispatchers.IO){
-                    saveDataStore(binding.ingresoCorreo.text.toString())
-                }
-
-                var intent = Intent(
-                    this,
-                    SecondActivity::class.java
-                )
-
-                intent.putExtra(
-                    "var1",
-                    ""
-                )
-
-                intent.putExtra("var2", 2)
-                startActivity(intent)
-            } else {
-                Snackbar.make(
-                    binding.pedOnl, "Usuario o contraseña inválidos",
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }
+            val username = binding.ingresoCorreo.text.toString()
+            val password = binding.ingresoContrasena.text.toString()
+            binding.progressBar.visibility= View.VISIBLE
+            singInWithFirebaseEmail(username, password)
         }
+
 
         binding.twitter.setOnClickListener {
             locationContract.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -272,18 +243,44 @@ class MainActivity : AppCompatActivity() {
             intentSpeech.putExtra(RecognizerIntent.EXTRA_PROMPT, "DI ALGO...")
             speechToText.launch(intentSpeech)
         }
-    }
-    private suspend fun saveDataStore(stringData: String){
-        dataStore.edit { prefs->
-            prefs[stringPreferencesKey("usuario")] = stringData
-            prefs[stringPreferencesKey("session")] = UUID.randomUUID().toString()
-            prefs[stringPreferencesKey("email")] = UUID.randomUUID().toString()
+        binding.registro.setOnClickListener{
+            startActivity(Intent(this, RegistroActivity::class.java))
         }
     }
 
-    private fun test(){
-        var location=MyContextManager(this)
-        location.getClientLocation()
+    private fun singInWithFirebaseEmail(email: String, password: String){
+        try {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithEmail:success")
+                        val user = auth.currentUser
+                        Toast.makeText(baseContext,
+                            "Acceso consedido.",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                        val intent = Intent(this, SecondActivity::class.java)
+                        intent.putExtra("user", email)
+                        startActivity(intent)
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithEmail:failure", task.exception)
+                        Toast.makeText(
+                            baseContext,
+                            "Acceso failldo.",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    }
+                }
+            binding.progressBar.visibility= View.GONE
+        } catch (e: Exception) {
+            binding.progressBar.visibility= View.GONE
+            Toast.makeText(
+                baseContext,
+                "Acceso failldo.",
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
     }
-
 }

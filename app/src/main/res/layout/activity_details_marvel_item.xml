@@ -6,11 +6,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="190dp"
+        android:layout_width="369dp"
+        android:layout_height="665dp"
         android:layout_margin="30dp"
-        app:elevation="10dp"
         app:cardCornerRadius="12dp"
+        app:elevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,40 +22,40 @@
 
             <ImageView
                 android:id="@+id/imgChar"
-                android:layout_width="112dp"
-                android:layout_height="165dp"
+                android:layout_width="210dp"
+                android:layout_height="255dp"
                 android:layout_margin="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.44"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.03"></ImageView>
+                app:layout_constraintVertical_bias="0.036"></ImageView>
 
             <TextView
                 android:id="@+id/textoName"
-                android:layout_width="186dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="16dp"
+                android:layout_width="295dp"
+                android:layout_height="114dp"
+                android:layout_marginTop="28dp"
                 android:textAlignment="center"
-                android:textSize="16sp"
+                android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.836"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/imgChar">
 
             </TextView>
 
             <TextView
                 android:id="@+id/textoComic"
-                android:layout_width="188dp"
-                android:layout_height="113dp"
-                android:layout_marginTop="8dp"
-                android:text="Marvel"
-                android:textSize="16sp"
+                android:layout_width="296dp"
+                android:layout_height="187dp"
+                android:layout_marginTop="32dp"
+                android:gravity="center"
+                android:text=""
+                android:textSize="40sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.433"
-                app:layout_constraintStart_toEndOf="@+id/imgChar"
+                app:layout_constraintHorizontal_bias="0.493"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textoName">
 
             </TextView>

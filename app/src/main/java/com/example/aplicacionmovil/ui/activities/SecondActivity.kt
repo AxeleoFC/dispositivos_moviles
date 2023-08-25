@@ -1,12 +1,19 @@
 package com.example.aplicacionmovil.ui.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import com.example.aplicacionmovil.R
 import com.example.aplicacionmovil.databinding.ActivitySecondBinding
 import com.example.aplicacionmovil.ui.fragments.FirstFragment
 import com.example.aplicacionmovil.ui.fragments.SecondFragment
 import com.example.aplicacionmovil.ui.fragments.ThirdFragment
+import com.flores.aplicacionmoviles.ui.utilities.FragmentsManager
+import com.google.android.material.snackbar.Snackbar
 
 class SecondActivity : AppCompatActivity() {
 
@@ -27,24 +34,30 @@ class SecondActivity : AppCompatActivity() {
     }
 
     private fun initClass() {
-        var name: String = ""
+        val user = intent.getStringExtra("user")
 
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
+            val bundle = Bundle()
+            bundle.putString("user", user)
             when (item.itemId) {
                 R.id.inicioMenu -> {
-                    com.flores.aplicacionmoviles.ui.utilities.FragmentsManager().replaceFragmet(supportFragmentManager, binding.frmContainer.id, SecondFragment())
+                    val secondFragment = SecondFragment()
+                    secondFragment.arguments = bundle
+                    FragmentsManager().replaceFragmet(supportFragmentManager, binding.frmContainer.id, secondFragment)
                     true
                 }
 
                 R.id.buscarMenu -> {
-                    com.flores.aplicacionmoviles.ui.utilities.FragmentsManager().replaceFragmet(supportFragmentManager, binding.frmContainer.id, FirstFragment())
+                    val firstFragment = FirstFragment()
+                    firstFragment.arguments = bundle
+                    FragmentsManager().replaceFragmet(supportFragmentManager, binding.frmContainer.id, firstFragment)
                     true
                 }
 
                 R.id.apis -> {
+                    autenticacionBiometrica(bundle)
 
-                    com.flores.aplicacionmoviles.ui.utilities.FragmentsManager().replaceFragmet(supportFragmentManager, binding.frmContainer.id, ThirdFragment())
                     true
                 }
 
@@ -56,5 +69,64 @@ class SecondActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+    }
+
+    private fun autenticacionBiometrica(bundle:Bundle){
+        if(checkBiometric()){
+            val executor= ContextCompat.getMainExecutor(this)
+            val biometricPrompt = BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Autenticacion requerida")
+                .setSubtitle("Ingrese su huella digital")
+                .setNegativeButtonText("Cancelar")
+                .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+                .build()
+            val biometricManager = BiometricPrompt(this
+                , executor
+                , object : BiometricPrompt.AuthenticationCallback(){
+                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                        super.onAuthenticationError(errorCode, errString)
+                    }
+                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                        super.onAuthenticationSucceeded(result)
+                        val thirdFragment = ThirdFragment()
+                        thirdFragment.arguments = bundle
+                        FragmentsManager().replaceFragmet(supportFragmentManager, binding.frmContainer.id, thirdFragment)
+                    }
+                    override fun onAuthenticationFailed() {
+                        super.onAuthenticationFailed()
+                    }
+                })
+            biometricManager.authenticate(biometricPrompt)
+        }else{
+            Snackbar.make(binding.root, "No se tiene los requisitos para hacer esto", Snackbar.LENGTH_SHORT).show()
+        }
+
+    }
+
+    private fun checkBiometric():Boolean{
+        var comprobar: Boolean=false
+        val biometricManager= BiometricManager.from(this)
+        when(biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)){
+            BiometricManager.BIOMETRIC_SUCCESS->{
+                comprobar = true
+            }
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE->{
+                comprobar= false
+            }
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE->{
+                comprobar= false
+            }
+            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED->{
+                val intent= Intent(Settings.ACTION_BIOMETRIC_ENROLL)
+                intent.putExtra(
+                    Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED
+                    , BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+                )
+
+                startActivity(intent)
+                comprobar= true
+            }
+        }
+        return comprobar
     }
 }

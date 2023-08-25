@@ -15,9 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.aplicacionmovil.R
 import com.example.aplicacionmovil.databinding.FragmentFirstBinding
+import com.example.aplicacionmovil.logic.data.WaifuChar
 import com.example.aplicacionmovil.logic.marvelLogic.MarvelLogicDB
+import com.example.aplicacionmovil.logic.waifuLogic.WaifuLogic
 import com.example.aplicacionmovil.ui.activities.DetailsMarvelItem
 import com.example.aplicacionmovil.ui.activities.dataStore
+import com.example.aplicacionmovil.ui.adapters.WaifuAdapter
 import com.example.aplicacionmovil.ui.data.UserDataStore
 import com.example.aplicacionmovil.ui.utilities.Metodos
 import com.flores.aplicacionmoviles.logic.data.MarvelChars
@@ -34,47 +37,39 @@ import kotlinx.coroutines.withContext
 
 class FirstFragment : Fragment() {
 
-
-    private var rvAdapter: MarvelAdapter = MarvelAdapter { sendMarvelItem(it) }
+    private lateinit var rvAdapter: WaifuAdapter
     private lateinit var binding:FragmentFirstBinding
     private lateinit var lmanager: LinearLayoutManager
     private lateinit var gManager: GridLayoutManager
-    private var limit = 99
+    private var limit = 5
     private var offset = 0
-
-    private var marvelCharsItems: MutableList<MarvelChars> = mutableListOf<MarvelChars>()
-    private var marvelCharsItemsDB: MutableList<MarvelChars> = mutableListOf<MarvelChars>()
+    private var wifuItems: MutableList<WaifuChar> = mutableListOf<WaifuChar>()
+    private var isLoading = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentFirstBinding.inflate(
             layoutInflater,
             container,
             false)
-
-
         lmanager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
-
         gManager = GridLayoutManager(requireActivity(), 2)
+        val user = arguments?.getString("user")
+        rvAdapter= WaifuAdapter(user!!) { sendWaifuItem(it) }
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
 
-        lifecycleScope.launch(Dispatchers.Main){
-            getDataStore().collect{user->
-                Log.d("UCE",user.name)
-                binding.textoFS1.text=user.email
-                Log.d("UCE",user.email)
-                Log.d("UCE",user.session)
-            }
+        binding.layaoutSimmer.visibility=View.VISIBLE
+        binding.linearLayout2.visibility=View.GONE
+        chargeDataRVInit(offset,limit){
+            binding.layaoutSimmer.visibility=View.GONE
+            binding.linearLayout2.visibility=View.VISIBLE
         }
-
-        chargeDataRVInit(offset,limit)
         binding.rvSwipe2.setOnRefreshListener {
             chargeDataRV(offset,limit)
             binding.rvSwipe2.isRefreshing = false
@@ -83,44 +78,46 @@ class FirstFragment : Fragment() {
 
         binding.rvMarvelChars2.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(
-                    recyclerView,
-                    dx,
-                    dy
-                )
-                val v = gManager.childCount  //cuantos elementos han pasado
-                val p = gManager.findFirstVisibleItemPosition() //posicion actual
-                val t = gManager.itemCount //cuantos tengo en total
-                if (dy > 0) {
-                    if ((v + p) >= t) {
-                        updateDataRV(limit,offset)
-                        var newItems= listOf<MarvelChars>()
-
-                        lifecycleScope.launch((Dispatchers.Main)) {
-                            this@FirstFragment.offset += limit
-                            newItems=withContext(Dispatchers.IO) {
-                                return@withContext (MarvelCharactersLogic().getAllMarvelChars(offset, limit))
-                            }
-                            rvAdapter.updateListItems(newItems)
-                            if(offset==56430){
-                                offset=0
-                            }
-                        }
-                    }
+                super.onScrolled(recyclerView, dx, dy)
+                val totalItemCount = gManager.itemCount
+                val firstVisibleItemPosition = gManager.findFirstVisibleItemPosition()
+                val middlePosition = totalItemCount / 2
+                if (!isLoading && firstVisibleItemPosition >= middlePosition) {
+                    isLoading = true
+                    CargandoDatos()
                 }
             }
         })
 
         binding.txtFilter2.addTextChangedListener { filteredText ->
-            val newItems = marvelCharsItems.filter { items ->
-                items.name.lowercase().contains(filteredText.toString().lowercase())
+            val newItems = wifuItems.filter { items ->
+                items.names.lowercase().contains(filteredText.toString().lowercase())
+            }
+            lifecycleScope.launch(Dispatchers.Main){
+                binding.textoFS1.text=filteredText.toString()
             }
             rvAdapter.replaceListItems(newItems)
         }
 
     }
+    private fun CargandoDatos() {
+        Snackbar.make(binding.root, "Cargando nuevas waifus...", Snackbar.LENGTH_SHORT).show()
+        lifecycleScope.launch(Dispatchers.Main) {
+            val newItems = withContext(Dispatchers.IO) {
+                val fetchedIds = wifuItems.map { it._id }
+                val freshItems = WaifuLogic().getWaifusChar(limit)
+                    .filter { it._id !in fetchedIds }
+                freshItems
+            }
+            rvAdapter.updateListItems(newItems)
+            wifuItems.addAll(newItems)
+            offset += limit
+            isLoading = false
+        }
+    }
 
-    private fun sendMarvelItem(item: MarvelChars) {
+
+    private fun sendWaifuItem(item: WaifuChar) {
         val i = Intent(requireActivity(), DetailsMarvelItem::class.java)
         i.putExtra("name", item)
         startActivity(i)
@@ -128,10 +125,10 @@ class FirstFragment : Fragment() {
 
     fun chargeDataRV(limit: Int,offset: Int) {
         lifecycleScope.launch(Dispatchers.Main) {
-            marvelCharsItems = withContext(Dispatchers.IO) {
-                return@withContext (MarvelCharactersLogic().getAllMarvelChars(offset, limit))
+            wifuItems = withContext(Dispatchers.IO) {
+                return@withContext (WaifuLogic().getWaifusChar(limit))
             }
-            rvAdapter.items = marvelCharsItems
+            rvAdapter.items = wifuItems
 
             binding.rvMarvelChars2.apply {
                 this.adapter = rvAdapter
@@ -141,44 +138,19 @@ class FirstFragment : Fragment() {
         }
     }
 
-    private fun chargeDataRVDB(limit: Int, offset: Int) {
-        if(Metodos().isOnline(requireActivity())){
-            lifecycleScope.launch(Dispatchers.Main) {
-                marvelCharsItems = withContext(Dispatchers.IO) {
-                    var marvelChars= MarvelLogicDB().getAllMarvelCharsDB().toMutableList()
-                    if(marvelChars.isEmpty()){
-                        marvelChars=(MarvelCharactersLogic().getAllMarvelChars(offset,limit))
-                    }
-
-                    return@withContext (marvelChars)
-                }
-                rvAdapter.items = marvelCharsItems
-                binding.rvMarvelChars2.apply {
-                    this.adapter = rvAdapter
-                    this.layoutManager = gManager
-                }
-            }
-            this@FirstFragment.offset +=limit
-            this@FirstFragment.limit +=20
-        }else{
-            Snackbar.make(binding.cardView2,"No se pudo cargar",Snackbar.LENGTH_LONG).show()
-        }
-
-    }
-
-
-    fun chargeDataRVInit(offset: Int,limit: Int) {
+    fun chargeDataRVInit(offset: Int, limit: Int, callback: () -> Unit)  {
         if (Metodos().isOnline(requireActivity())) {
             lifecycleScope.launch(Dispatchers.Main) {
-                marvelCharsItems = withContext(Dispatchers.IO) {
-                    return@withContext (MarvelCharactersLogic().getAllMarvelChars(offset, limit))
+                wifuItems = withContext(Dispatchers.IO) {
+                    return@withContext (WaifuLogic().getWaifusChar(limit))
                 }
-                rvAdapter.items = marvelCharsItems
+                rvAdapter.items = wifuItems
                 binding.rvMarvelChars2.apply {
                     this.adapter = rvAdapter
                     this.layoutManager = gManager
                 }
                 this@FirstFragment.offset += limit
+                callback()
             }
         } else {
             Snackbar.make(
@@ -190,32 +162,11 @@ class FirstFragment : Fragment() {
         }
     }
 
-    fun updateDataRV(limit: Int,offset: Int) {
-        var items:List<MarvelChars> = listOf()
-        lifecycleScope.launch(Dispatchers.Main) {
-            items = withContext(Dispatchers.IO) {
-                return@withContext (MarvelCharactersLogic().getAllMarvelChars(offset, limit))
-            }
-            rvAdapter.updateListItems(items)
-            binding.rvMarvelChars2.apply {
-                this.adapter = rvAdapter
-                this.layoutManager = gManager
-            }
-            this@FirstFragment.offset += limit
-        }
-    }
-
-    private fun getDataStore()=requireActivity().dataStore.data.map {prefs->
-            UserDataStore(
-            name = prefs[stringPreferencesKey("usuario")].orEmpty(),
-            email = prefs[stringPreferencesKey("email")].orEmpty(),
-            session = prefs[stringPreferencesKey("session")].orEmpty())
-    }
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch(Dispatchers.Main){
             withContext(Dispatchers.IO){
-                marvelCharsItemsDB=MarvelLogicDB().getAllMarvelCharsDB().toMutableList()
+                //marvelCharsItemsDB=MarvelLogicDB().getAllMarvelCharsDB().toMutableList()
             }
 
         }

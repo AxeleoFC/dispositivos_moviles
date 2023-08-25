@@ -13,4 +13,10 @@
     <color name="title_color_dm">#fdffff</color>
     <color name="blue">#3F51B5</color>
     <color name="red">#D3266B</color>
+
+    <color name="fondo_memo">#fe7f66</color>
+    <color name="fondo_memo_botones">#83C5BE</color>
+    <color name="fondo_memo_eventos">#006D77</color>
+    <color name="colorPrimaryDark">#FF5722</color>
+    <color name="colorAccent">#FFC107</color>
 </resources>
