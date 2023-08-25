@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "549552801251",
+    "project_id": "practicauce-5a534",
+    "storage_bucket": "practicauce-5a534.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549552801251:android:99d4e57a46ea94cb97ccd6",
+        "android_client_info": {
+          "package_name": "com.example.aplicacionmovil"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "549552801251-efbqf12acaqr86rjda8r6ghtp43m62r4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfsurS1v52KOYhxu9IO6cr-8pqcNVT-ls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "549552801251-efbqf12acaqr86rjda8r6ghtp43m62r4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
