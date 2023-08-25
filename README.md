@@ -1,9 +1,9 @@
-# Series App
+º# Series App
 La informacion de los personajes proviene de la API Waifu.it: https://waifu.it
 
 ## Features
 * Personalización de diseños y temas en la interfaz de usuario.
-* Utilización del micrófono para acceder al menú de inicio a través de comandos de voz.
+* Utilización del micrófono para acceder a internet desde el menú de inicio a través de comandos de voz.
 * Autenticación mediante Firebase para funciones de inicio de sesión y registro de usuarios.
 * Envío y recepción de notificaciones dentro de la aplicación.
 * Implementación de una barra de navegación para facilitar la navegación entre secciones.
@@ -12,7 +12,6 @@ La informacion de los personajes proviene de la API Waifu.it: https://waifu.it
 * Uso de RecyclerView y adaptadores para la presentación eficiente de listas de datos.
 * Obtención de información de Waifu.it a través de la conexión a internet.
 * Procesamiento de imágenes utilizando la biblioteca Picasso.
-* Gestión de la base de datos con Room, incluyendo el uso de Daos y la definición de la estructura de la base de datos.
 * Aplicación de la Arquitectura Limpia (Clean Architecture) para separar las capas de datos, lógica y interfaz de usuario.
 * Utilización de fragmentos (fragments) y FrameLayouts para crear la estructura de la interfaz.
 * Autenticación biométrica mediante la huella digital para aumentar la seguridad.
