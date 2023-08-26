@@ -66,7 +66,11 @@ La informacion de los personajes proviene de la API Waifu.it: https://waifu.it
 ![](demo/menu_buscar.png)
 ![](demo/dato_personajes.png)
 ## Demo
-[Ver en YouTube](https://www.youtube.com/embed/y35pN9ukLUM)
+
+
+https://github.com/AxeleoFC/dispositivos_moviles/assets/105688191/f0cbabd8-794f-435c-bc8e-2f98aa661c86
+
+
 [Descargar desde GitHub](https://github.com/AxeleoFC/dispositivos_moviles/blob/trabajo/demo/demo.mp4)
 
 
