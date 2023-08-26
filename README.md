@@ -1,4 +1,5 @@
-
+# Integrantes
+Axel Flores
 
 # Series App
 La informacion de los personajes proviene de la API Waifu.it: https://waifu.it
@@ -66,7 +67,11 @@ La informacion de los personajes proviene de la API Waifu.it: https://waifu.it
 ![](demo/menu_buscar.png)
 ![](demo/dato_personajes.png)
 ## Demo
-[![](demo/demo.mp4)](https://github.com/AxeleoFC/dispositivos_moviles/blob/trabajo/demo/demo.mp4)
+![](https://github.com/AxeleoFC/dispositivos_moviles/blob/trabajo/demo/demo.mp4)
+<video width="320" height="240" controls>
+  <source src="https://github.com/AxeleoFC/dispositivos_moviles/blob/trabajo/demo/demo.mp4" type="video/mp4">
+  Tu navegador no soporta la etiqueta de video.
+</video>
 https://github.com/AxeleoFC/dispositivos_moviles/blob/trabajo/demo/demo.mp4
 
 
