@@ -1,7 +1,7 @@
 # Integrantes
 Axel Flores
 
-# Series App
+# Personajes App
 La informacion de los personajes proviene de la API Waifu.it: https://waifu.it
 
 ## Features
